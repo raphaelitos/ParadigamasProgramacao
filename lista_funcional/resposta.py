@@ -1,17 +1,20 @@
 # Questão 1
 def head(lista):
+    """Retorna o primeiro elemento de uma lista."""
     if lista == []:
         return None
     return lista[0]
 
 # Questão 2
 def tail(lista):
+    """Retorna todos os elementos de uma lista, exceto o primeiro."""
     if lista == []:
         return None
     return lista[1:]
 
 # Questão 3
 def init(lista):
+    """Retorna todos os elementos de uma lista, exceto o último."""
     if lista == []:
         return None
     inv = lista[::-1]
@@ -20,6 +23,7 @@ def init(lista):
 
 # Questão 4
 def last(lista):
+    """Retorna o último elemento de uma lista."""
     if lista == []:
         return None
     inv = lista[::-1]
@@ -27,6 +31,7 @@ def last(lista):
 
 # Questão 5
 def fibonacci(n):
+    """Retorna o n-ésimo termo da sequência de Fibonacci."""
     if n == 0:
         return 0
     if n == 1:
@@ -35,6 +40,7 @@ def fibonacci(n):
 
 # Questão 6
 def concat(l1, l2):
+    """Concatena duas listas de forma recursiva."""
     if l1 == []:
         return l2
     if l2 == []:
@@ -45,6 +51,7 @@ def concat(l1, l2):
 
 # Questão 7
 def inList(l1, item):
+    """Verifica se um elemento pertence a uma lista."""
     if l1 == []:
         return False
     if head(l1) == item:
@@ -55,21 +62,20 @@ def inList(l1, item):
 
 # Questão 8
 def union(l1, l2):
-    if l1 == []:
-        return l2
+    """Retorna a união de duas listas sem elementos repetidos."""
     if l2 == []:
         return l1
     
     item = head(l2)
-    listaconc = l1
     
-    if not inList(l1, item):
-        listaconc = l1 + [item]
-    
-    return union(listaconc, tail(l2))
+    if inList(l1, item):
+        return union(l1, tail(l2))
+    else:
+        return union(concat(l1, [item]), tail(l2))
 
 # Questão 9
 def upper_than_n(lista, n):
+    """Conta quantos elementos da lista são maiores que n."""
     if(lista == []):
         return 0
     num = 0
@@ -80,8 +86,9 @@ def upper_than_n(lista, n):
     
     return num + upper_than_n(tail(lista), n)
 
-
+# Questão 10
 def upper_aux(lista, n, nova):
+    """Função auxiliar que acumula elementos maiores que n."""
     if(lista == []):
         return nova
 
@@ -92,8 +99,8 @@ def upper_aux(lista, n, nova):
     else:
         return upper_aux(tail(lista), n, nova)
 
-# Questão 10
 def upper_list(lista, n):
+    """Retorna lista com elementos maiores que n."""
     if(lista == []):
         return []
 
@@ -104,10 +111,39 @@ def upper_list(lista, n):
     else:
         return upper_aux(tail(lista), n, [])
     
+def v2_upper_list(lista, n):
+    """Retorna lista com elementos maiores que n."""
+    if(lista == []):
+        return []
 
-l1 = [1, 2, 3, 4, 5]
+    item = head(lista)
+    
+    if item > n:
+        return concat([item], v2_upper_list(tail(lista), n))
+    else:
+        return v2_upper_list(tail(lista), n)
+    
+
+# Questão 11
+#Escreva uma função que inverte o conteúdo de uma lista. Use apenas as funções da Q1 e a da Q6:
+# invertelista (“abcd”) = “dcba”.
+
+#Questão 12
+#Escreva uma função que receba uma palavra e gere seu palíndromo. Ex.: geraPalindromo (“abcd”) = “abcddcba”.
+
+#Questão 13
+def size_list(lista):
+    """Retorna o tamanho de lista."""
+    if(lista == []):
+        return 0
+    
+    return 1 + size_list(tail(lista))
+
+
+#--- testes ---#
+l1 = [1, 2, 3, 4, 5, 6, 7, 8]
 l2 = [8, 16, 32, 64, 128]
-n = 14
+n = 24
 
 
-print(upper_list(l2, n))
+print(size_list(l1))
