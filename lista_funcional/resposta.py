@@ -125,11 +125,20 @@ def v2_upper_list(lista, n):
     
 
 # Questão 11
-#Escreva uma função que inverte o conteúdo de uma lista. Use apenas as funções da Q1 e a da Q6:
-# invertelista (“abcd”) = “dcba”.
+def inverte_lista(lista):
+    """Inverte o conteúdo de lista"""
+    if(lista == []):
+        return []
+    return concat(inverte_lista(tail(lista)), [head(lista)])
 
 #Questão 12
-#Escreva uma função que receba uma palavra e gere seu palíndromo. Ex.: geraPalindromo (“abcd”) = “abcddcba”.
+def gera_palindromo(palavra):
+    """gera o palíndromo de palavra"""
+    lista_pal = list(palavra)
+    inv = inverte_lista(lista_pal)
+    
+    return ''.join(concat(lista_pal, inv))
+
 
 #Questão 13
 def size_list(lista):
@@ -139,11 +148,44 @@ def size_list(lista):
     
     return 1 + size_list(tail(lista))
 
+#Questão 14
+from math import sqrt
+
+def aux_eh_primo(num, div):
+    if(div > sqrt(num)):
+        return True
+    
+    if(num % div == 0):
+        return False
+    
+    return aux_eh_primo(num, (div + 1))
+
+
+def eh_primo(num):
+    """Verifica se num é primo"""
+    if (num <= 1):
+        return False
+    
+    return aux_eh_primo(num, 2)
+
+#Questão 15
+def strip(l1, l2):
+    if(l1 == []):
+        return []
+    
+    item = head(l1)
+
+    if(inList(l2, item)):
+        l2.remove(item)
+    
+    return strip(tail(l1), l2)
+
+#Questão 16
 
 #--- testes ---#
 l1 = [1, 2, 3, 4, 5, 6, 7, 8]
 l2 = [8, 16, 32, 64, 128]
 n = 24
 
-
-print(size_list(l1))
+strip(l1, l2)
+print(l2)
