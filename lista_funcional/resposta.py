@@ -134,10 +134,10 @@ def inverte_lista(lista):
 #Questão 12
 def gera_palindromo(palavra):
     """gera o palíndromo de palavra"""
-    lista_pal = list(palavra)
+    lista_pal = list(palavra) #transforma em lista
     inv = inverte_lista(lista_pal)
     
-    return ''.join(concat(lista_pal, inv))
+    return ''.join(concat(lista_pal, inv)) #transforma em string dnv
 
 
 #Questão 13
@@ -170,22 +170,57 @@ def eh_primo(num):
 
 #Questão 15
 def strip(l1, l2):
-    if(l1 == []):
+    """retira de l2 todos os elementos que ocorrem em l1"""
+    if(l2 == []):
         return []
     
-    item = head(l1)
+    item = head(l2)
 
-    if(inList(l2, item)):
-        l2.remove(item)
-    
-    return strip(tail(l1), l2)
+    if(inList(l1, item)):
+        return strip(l1, tail(l2))
+    else:
+        return concat([item], strip(l1, tail(l2)))
 
 #Questão 16
+def retira_vogal(lista):
+    """retira todas as vogais de lista"""
+    if(lista == []):
+        return []
+    
+    vogais = list("aeiouAEIOU")
+    item = head(lista)
+    if(inList(vogais, item)):
+        return retira_vogal(tail(lista))
+    
+    return concat([item], retira_vogal(tail(lista)))
+    
+def consoant_list(consoantes, palavra):
+    """confere consoantes eh palavra sem vogal"""
+    palavra_limpa = ''.join(retira_vogal(list(palavra)))
+
+    return consoantes == palavra_limpa
+
+#Questão 17
+
+
+#Questão 18
+def proximo_primo(num):
+    """retorna o menor número primo que é maior que o número"""
+    n = num + 1
+    if(eh_primo(n)):
+        return (n)
+    
+    return proximo_primo(n)
+
+
+#Questão 19
+
+#Questão 20
+
 
 #--- testes ---#
 l1 = [1, 2, 3, 4, 5, 6, 7, 8]
-l2 = [8, 16, 32, 64, 128]
+l2 = [1, 2, 3, 4, 5, 6, 7, 8]
 n = 24
 
-strip(l1, l2)
-print(l2)
+print(consoant_list("brbr", "barbara"))
