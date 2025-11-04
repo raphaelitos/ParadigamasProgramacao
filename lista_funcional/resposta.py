@@ -163,8 +163,10 @@ def aux_eh_primo(num, div):
 
 def eh_primo(num):
     """Verifica se num é primo"""
-    if (num <= 1):
+    if (num == 1 or num == 0):
         return False
+    if(num < 0):
+        return aux_eh_primo((num * (-1)), 2)
     
     return aux_eh_primo(num, 2)
 
@@ -189,38 +191,96 @@ def retira_vogal(lista):
     
     vogais = list("aeiouAEIOU")
     item = head(lista)
+    
     if(inList(vogais, item)):
         return retira_vogal(tail(lista))
     
     return concat([item], retira_vogal(tail(lista)))
     
 def consoant_list(consoantes, palavra):
-    """confere consoantes eh palavra sem vogal"""
+    """confere se consoantes eh palavra sem vogal"""
     palavra_limpa = ''.join(retira_vogal(list(palavra)))
 
     return consoantes == palavra_limpa
 
 #Questão 17
+def matches(palavras, consoantes):
+    """retorna os itens em palavras onde consoantes eh o item sem vogal"""
+    if(palavras == []):
+        return []
+    
+    item = head(palavras)
+    if(consoant_list(consoantes, item)):
+        return concat([item], matches(tail(palavras), consoantes))
 
+    return matches(tail(palavras), consoantes)
 
 #Questão 18
 def proximo_primo(num):
-    """retorna o menor número primo que é maior que o número"""
+    """retorna o menor número primo que é maior que num"""
     n = num + 1
     if(eh_primo(n)):
         return (n)
     
     return proximo_primo(n)
 
-
 #Questão 19
+def primes_aux(num, div):
+    if (num == 1):
+        return []
+    if((num % div) == 0):
+        return concat([div], primes_aux((num/div), div))
+    else:
+        return primes_aux(num, proximo_primo(div))
+
+def primes(num):
+    """Decompoe num em fatores primos"""
+    if (num == 0):
+        return []
+    if(num < 0):
+        return primes_aux((num * (-1)), 2)
+    
+    return primes_aux(num, 2)
 
 #Questão 20
+def count(lista, item):
+    """Conta quantas vezes item aparece em lista."""
+    if lista == []:
+        return 0
+    if head(lista) == item:
+        return 1 + count(tail(lista), item)
+    else:
+        return count(tail(lista), item)
+    
+def prime_fac_aux(decomposicao):
+    """Gera lista de pares (fator, frequência) a partir de uma lista ordenada de fatores primos."""
+    if decomposicao == []:
+        return []
+    
+    item = head(decomposicao)
+    freq = count(decomposicao, item)
+    nova_decomposicao = strip([item], decomposicao)
+    
+    return concat([(item, freq)], prime_fac_aux(nova_decomposicao))
+
+def prime_factors(num):
+    """Fatora num em pares (fator, frequência)."""
+    if(num == 0):
+        return []
+    
+    decomposicao = primes(num)
+
+    return prime_fac_aux(decomposicao)
+
+
+# Questão 21
+
 
 
 #--- testes ---#
 l1 = [1, 2, 3, 4, 5, 6, 7, 8]
 l2 = [1, 2, 3, 4, 5, 6, 7, 8]
 n = 24
+dic = ["arara","arreio","haskell","vaca","vacuo","velho","vermelho","vicio"]
 
-print(consoant_list("brbr", "barbara"))
+print(prime_factors(-8))
