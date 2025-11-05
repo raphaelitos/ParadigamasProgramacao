@@ -190,18 +190,14 @@ def retira_vogal(lista):
         return []
     
     vogais = list("aeiouAEIOU")
-    item = head(lista)
     
-    if(inList(vogais, item)):
-        return retira_vogal(tail(lista))
-    
-    return concat([item], retira_vogal(tail(lista)))
+    return strip(vogais, lista)
     
 def consoant_list(consoantes, palavra):
     """confere se consoantes eh palavra sem vogal"""
     palavra_limpa = ''.join(retira_vogal(list(palavra)))
 
-    return consoantes == palavra_limpa
+    return consoantes in palavra_limpa
 
 #Questão 17
 def matches(palavras, consoantes):
@@ -210,6 +206,7 @@ def matches(palavras, consoantes):
         return []
     
     item = head(palavras)
+    
     if(consoant_list(consoantes, item)):
         return concat([item], matches(tail(palavras), consoantes))
 
@@ -341,7 +338,7 @@ def pyths(n):
 
 #Questão 25
 def fatores_aux(num, div):
-    if (num <= div):
+    if ((num/2) < div):
         return []
     if((num % div) == 0):
         return concat([div], fatores_aux(num, (div + 1)))
@@ -384,8 +381,31 @@ def escalar(v, w):
     #zip emparelha os itens de v e w par a par
     return soma([x * y for x, y in zip(v, w)])
 
-
 #Questão 27
+def is_some_in(l1, l2):
+    """Verifica se há algum item de l1 em l2"""
+    if(l1 == []):
+        return False
+    
+    if inList(l2, head(l1)):
+        return True
+    
+    return is_some_in(tail(l1), l2)
+
+def ataca(p, posicoes):
+    """verifica se a rainha na posicao p ataca alguma em posicoes"""
+    ataques_rainha = [
+            (a, b)
+            for a in range(1, 8 + 1)
+            for b in range(1, 8 + 1)
+            if(
+                (a == p[0]) or #linhas
+                (b == p[1]) or #colunas
+                (abs(a - p[0]) == abs(b - p[1])) #diagonais
+            )
+        ]
+    
+    return is_some_in(posicoes, ataques_rainha)
 
 
 #Questão 28
@@ -417,7 +437,6 @@ def compress(lista):
     return concat([a], compress(tail(lista)))
 
     
-
 #Questão 30
 def take_while_equal(x, lista):
     """Coleta em lista os elementos consecutivos a x iguais a ele"""
@@ -442,12 +461,30 @@ def pack(lista):
     
     return concat([grupo], pack(resto))
 
+
 # Questão 31
+def aux_encode(lista_code):
+    if(size_list(lista_code) == 0):
+        return []
+
+    item = head(lista_code)
+    code = size_list(item)
+    
+    return concat([(head(item), code)], aux_encode(tail(lista_code)))
+
+def encode(palavra):
+    code = pack(list(palavra))
+    return aux_encode(code)
 
 
 # Questão 32
+def decode(lista_code):
+    if(lista_code == []):
+        return ''
+    
+    item = head(lista_code)
 
-
+    return (item[0] * item[1]) + decode(tail(lista_code))
 
 #--- testes ---#
 l1 = [1,2,2, 2, 2, 3, 3, 4, 5]
@@ -456,4 +493,4 @@ l3 = [[10], [20,30], [40]]
 n = 24
 dic = ["arara","arreio","haskell","vaca","vacuo","velho","vermelho","vicio"]
 
-print(pack(l1))
+print(matches (dic, "rr"))
