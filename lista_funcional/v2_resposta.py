@@ -1,4 +1,4 @@
-# só uma versao gepetonica usando funcoes builtin do python pra ver de quale
+# só uma versao gepetonica usando funcoes builtin do python pra ver de quale. Não conferi se estão certas nem se eh tudo funcional mesmo
 
 from functools import lru_cache
 from itertools import groupby, chain
@@ -40,22 +40,36 @@ def gera_palindromo(palavra): """Gera o palíndromo de uma palavra."""; return p
 def size_list(lst): """Retorna o tamanho da lista."""; return len(lst)
 
 # Questões 14, 18 e 19
-def eh_primo(n): """Verifica se n é primo."""; return n > 1 and all(n % d for d in range(2, int(sqrt(n)) + 1))
+def eh_primo(n, d=2):
+    """Verifica se n é primo."""
+    if n <= 1:
+        return False
+    if d > int(sqrt(n)):
+        return True
+    if n % d == 0:
+        return False
+    return eh_primo(n, d + 1)
+
 def proximo_primo(n): 
-    """Retorna o próximo número primo."""; 
-    n += 1
-    while not eh_primo(n): n += 1
-    return n
+    """Retorna o próximo número primo depois de n."""; 
+    if eh_primo(n+1):
+        return (n+1)
+    return proximo_primo(n + 1)
+
 def primes(num): 
     """Decompõe num em fatores primos."""
-    if num in (0, 1): return []
-    n, div, fatores = abs(num), 2, []
-    while n > 1:
-        while n % div == 0:
-            fatores.append(div)
-            n //= div
-        div = proximo_primo(div)
-    return fatores
+    if num in (0, 1): 
+        return []
+    
+    def aux(n, div):
+        if n == 1:
+            return []
+        if n % div == 0:
+            return [div] + aux((n / div), div)
+        
+        return aux(n, proximo_primo(div))
+    
+    return aux(abs(num), 2)
 
 # Questão 15
 def strip(l1, l2): 
@@ -121,3 +135,6 @@ def encode(palavra): """Codifica palavra por run-length."""; return [(ch, len(li
 
 # Questão 32
 def decode(lista_code): """Decodifica lista run-length."""; return ''.join(ch * n for ch,n in lista_code)
+
+
+print(primes(28))
